@@ -31,3 +31,7 @@ export type Category =
   | "full-house"
   | "yahtzee"
   | "chance";
+
+export type GameScore = {
+  [category in Category]: number | undefined;
+};

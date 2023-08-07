@@ -124,6 +124,7 @@ test("return 0 if not a small straight", () => {
 
 test("identifies a large straight and returns 20 (sum of nums)", () => {
   expect(scoreLargeStraight([2, 3, 4, 5, 6])).toBe(20);
+  expect(scoreLargeStraight([5, 6, 2, 3, 4])).toBe(20);
 });
 
 test("return 0 if not a large straight", () => {

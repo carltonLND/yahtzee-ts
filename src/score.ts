@@ -1,4 +1,4 @@
-import { RollResult, Category, RollValue } from "./gameTypes";
+import { RollResult, Category, RollValue, GameScore } from "./gameTypes";
 import { countOccurrences, getPairs } from "./utils";
 
 export function scoreRound(rolls: RollResult, category: Category): number {
@@ -40,6 +40,14 @@ export function scoreRound(rolls: RollResult, category: Category): number {
   }
 }
 
+export function scoreAll(rolls: RollResult, gameScore: GameScore) {
+  for (const _c of Object.keys(gameScore)) {
+    const category = _c as Category;
+    gameScore[category] = scoreRound(rolls, category);
+  }
+  return gameScore;
+}
+
 export function scoreSum(rolls: RollResult, num: RollValue): number {
   return rolls.reduce((acc, curr) => acc + (curr === num ? curr : 0), 0);
 }
@@ -74,12 +82,18 @@ export function scoreNumOfKind(rolls: RollResult, num: number): number {
   return 0;
 }
 
+// TODO: obvious bug...
 export function scoreSmallStraight(rolls: RollResult): number {
-  return JSON.stringify(rolls) === "[1,2,3,4,5]" ? 15 : 0;
+  return JSON.stringify([...rolls].sort((a, b) => a - b)) === "[1,2,3,4,5]"
+    ? 15
+    : 0;
 }
 
+// TODO: obvious bug...
 export function scoreLargeStraight(rolls: RollResult): number {
-  return JSON.stringify(rolls) === "[2,3,4,5,6]" ? 20 : 0;
+  return JSON.stringify([...rolls].sort((a, b) => a - b)) === "[2,3,4,5,6]"
+    ? 20
+    : 0;
 }
 
 export function scoreFullHouse(rolls: RollResult): number {
