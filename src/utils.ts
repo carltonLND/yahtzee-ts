@@ -1,8 +1,8 @@
-import { RollResult } from "./gameTypes";
+import { RollValue } from "./gameTypes";
 
 type RollOccurrences = Map<number, number>;
 
-export function countOccurrences(rolls: RollResult): RollOccurrences {
+export function countOccurrences(rolls: RollValue[]): RollOccurrences {
   const rollOccurrences = new Map<number, number>();
 
   rolls.forEach((roll) => {

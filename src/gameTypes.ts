@@ -5,16 +5,6 @@ export interface DiceRoll {
   isLocked: boolean;
 }
 
-export type GameRoll = [DiceRoll, DiceRoll, DiceRoll, DiceRoll, DiceRoll];
-
-export type RollResult = [
-  RollValue,
-  RollValue,
-  RollValue,
-  RollValue,
-  RollValue,
-];
-
 export type Category =
   | "ones"
   | "twos"

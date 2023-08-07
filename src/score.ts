@@ -1,7 +1,7 @@
-import { RollResult, Category, RollValue, GameScore } from "./gameTypes";
+import { Category, RollValue, GameScore } from "./gameTypes";
 import { countOccurrences, getPairs } from "./utils";
 
-export function scoreRound(rolls: RollResult, category: Category): number {
+export function scoreRound(rolls: RollValue[], category: Category): number {
   switch (category) {
     case "ones":
       return scoreSum(rolls, 1);
@@ -40,7 +40,7 @@ export function scoreRound(rolls: RollResult, category: Category): number {
   }
 }
 
-export function scoreAll(rolls: RollResult, gameScore: GameScore) {
+export function scoreAll(rolls: RollValue[], gameScore: GameScore) {
   for (const _c of Object.keys(gameScore)) {
     const category = _c as Category;
     gameScore[category] = scoreRound(rolls, category);
@@ -48,16 +48,16 @@ export function scoreAll(rolls: RollResult, gameScore: GameScore) {
   return gameScore;
 }
 
-export function scoreSum(rolls: RollResult, num: RollValue): number {
+export function scoreSum(rolls: RollValue[], num: RollValue): number {
   return rolls.reduce((acc, curr) => acc + (curr === num ? curr : 0), 0);
 }
 
-export function scorePair(rolls: RollResult): number {
+export function scorePair(rolls: RollValue[]): number {
   const pairs = getPairs(countOccurrences(rolls));
   return pairs.length === 0 ? 0 : Math.max(...pairs) * 2;
 }
 
-export function scoreTwoPairs(rolls: RollResult): number {
+export function scoreTwoPairs(rolls: RollValue[]): number {
   const occurrences = countOccurrences(rolls);
 
   for (const [roll, count] of occurrences.entries()) {
@@ -70,7 +70,7 @@ export function scoreTwoPairs(rolls: RollResult): number {
   return pairs.length < 2 ? 0 : pairs.reduce((prev, curr) => prev + curr) * 2;
 }
 
-export function scoreNumOfKind(rolls: RollResult, num: number): number {
+export function scoreNumOfKind(rolls: RollValue[], num: number): number {
   const occurrences = countOccurrences(rolls);
 
   for (const [roll, count] of occurrences.entries()) {
@@ -82,31 +82,29 @@ export function scoreNumOfKind(rolls: RollResult, num: number): number {
   return 0;
 }
 
-// TODO: obvious bug...
-export function scoreSmallStraight(rolls: RollResult): number {
+export function scoreSmallStraight(rolls: RollValue[]): number {
   return JSON.stringify([...rolls].sort((a, b) => a - b)) === "[1,2,3,4,5]"
     ? 15
     : 0;
 }
 
-// TODO: obvious bug...
-export function scoreLargeStraight(rolls: RollResult): number {
+export function scoreLargeStraight(rolls: RollValue[]): number {
   return JSON.stringify([...rolls].sort((a, b) => a - b)) === "[2,3,4,5,6]"
     ? 20
     : 0;
 }
 
-export function scoreFullHouse(rolls: RollResult): number {
+export function scoreFullHouse(rolls: RollValue[]): number {
   const rollCounts = [...countOccurrences(rolls).values()];
   return rollCounts.length === 2 && rollCounts.every((count) => count > 1)
     ? rolls.reduce((acc, curr) => acc + curr, 0)
     : 0;
 }
 
-export function scoreYahtzee(rolls: RollResult): number {
+export function scoreYahtzee(rolls: RollValue[]): number {
   return new Set(rolls).size === 1 ? 50 : 0;
 }
 
-export function scoreChance(rolls: RollResult): number {
+export function scoreChance(rolls: RollValue[]): number {
   return rolls.reduce((acc, curr) => acc + curr, 0);
 }
